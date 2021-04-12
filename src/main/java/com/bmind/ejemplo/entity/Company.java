@@ -36,7 +36,7 @@ public class Company {
 	@Column( name="other_name" )
 	private String otherName;
 	
-	@Column( name="surname" )
+	@Column( name="surrname" )
 	private String surname;
 	
 	@Column( name="second_surname" )
@@ -53,4 +53,31 @@ public class Company {
 	
 	@Column( name="phone" )
 	private String phone;
+	
+	public Company( 
+				String verificationDigit,
+				String identificationNumber,
+				String firstName,
+				String otherName,
+				String surname,
+				String secondSurname,
+				String direction,
+				String companyCol,
+				String phone,
+				String businessName
+			) {
+		
+		this.businessName = businessName;
+		this.verificationDigit = verificationDigit;
+		this.identificationNumber = identificationNumber;
+		this.firstName = firstName;
+		this.otherName = otherName;
+		this.surname = surname;
+		this.secondSurname = secondSurname;
+		this.direction = direction;
+		this.companyCol = companyCol;
+		this.phone = phone;
+		
+		
+	}
 }

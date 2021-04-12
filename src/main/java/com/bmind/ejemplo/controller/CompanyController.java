@@ -7,6 +7,7 @@ import com.bmind.ejemplo.model.CompanyResponse;
 import com.bmind.ejemplo.service.CompanyService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,8 +36,13 @@ public class CompanyController {
 	
 	@GetMapping( "/company/{id}" )
 	public ResponseEntity getCompanyById( @PathVariable("id") int id ) {
-		CompanyResponse response = this.companyService.getCompanyById(id);
-		return new ResponseEntity( HttpStatus.OK );
+		Optional<CompanyResponse>  response = this.companyService.getCompanyById(id);
+		if( response.isPresent() ) {
+			return new ResponseEntity( response, HttpStatus.OK );			
+		} else {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+
 	}
 	
 	@PostMapping( "/company" )

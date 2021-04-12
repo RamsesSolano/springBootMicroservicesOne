@@ -1,6 +1,7 @@
 package com.bmind.ejemplo.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,32 @@ public class CompanyImpl implements CompanyService {
 	
 	@Override
 	public CompanyResponse addCompany(CompanyRequest newCompany) {
-		// TODO Auto-generated method stub
-		return null;
+		Company newCompanyToSave = new Company(
+				newCompany.getVerificationDigit(),
+				newCompany.getIdentificationNumber(),
+				newCompany.getFirstName(),
+				newCompany.getOtherName(),
+				newCompany.getSurname(),
+				newCompany.getSecondSurname(),
+				newCompany.getDirection(),
+				newCompany.getCompanyCol(),
+				newCompany.getPhone(),
+				newCompany.getBusinessName()
+				);
+		newCompanyToSave = this.companyJpaRepository.save(newCompanyToSave);
+		return new CompanyResponse(
+				newCompanyToSave.getId(),
+				newCompanyToSave.getVerificationDigit(),
+				newCompanyToSave.getIdentificationNumber(),
+				newCompanyToSave.getFirstName(),
+				newCompanyToSave.getOtherName(),
+				newCompanyToSave.getSurname(),
+				newCompanyToSave.getSecondSurname(),
+				newCompanyToSave.getDirection(),
+				newCompanyToSave.getCompanyCol(),
+				newCompanyToSave.getPhone(),
+				newCompanyToSave.getBusinessName()
+				);
 	}
 
 	@Override
@@ -48,9 +73,26 @@ public class CompanyImpl implements CompanyService {
 	}
 
 	@Override
-	public CompanyResponse getCompanyById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional < CompanyResponse > getCompanyById(int id) {
+		CompanyResponse response = null;
+		Optional<Company> company = this.companyJpaRepository.findById(id);
+		if( company.isPresent() == true ) {
+			response = new CompanyResponse(
+					company.get().getId(),
+					company.get().getVerificationDigit(),
+					company.get().getIdentificationNumber(),
+					company.get().getFirstName(),
+					company.get().getOtherName(),
+					company.get().getSurname(),
+					company.get().getSecondSurname(),
+					company.get().getDirection(),
+					company.get().getCompanyCol(),
+					company.get().getPhone(),
+					company.get().getBusinessName()
+					);
+			
+		}
+		return Optional.of(response);
 	}
 
 }
