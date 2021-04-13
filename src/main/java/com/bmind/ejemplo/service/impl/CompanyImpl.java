@@ -22,77 +22,80 @@ public class CompanyImpl implements CompanyService {
 	private CompanyJpaRepository companyJpaRepository;
 	
 	@Override
-	public CompanyResponse addCompany(CompanyRequest newCompany) {
-		Company newCompanyToSave = new Company(
-				newCompany.getVerificationDigit(),
-				newCompany.getIdentificationNumber(),
-				newCompany.getFirstName(),
-				newCompany.getOtherName(),
-				newCompany.getSurname(),
-				newCompany.getSecondSurname(),
-				newCompany.getDirection(),
-				newCompany.getCompanyCol(),
-				newCompany.getPhone(),
-				newCompany.getBusinessName()
-				);
-		newCompanyToSave = this.companyJpaRepository.save(newCompanyToSave);
-		return new CompanyResponse(
-				newCompanyToSave.getId(),
-				newCompanyToSave.getVerificationDigit(),
-				newCompanyToSave.getIdentificationNumber(),
-				newCompanyToSave.getFirstName(),
-				newCompanyToSave.getOtherName(),
-				newCompanyToSave.getSurname(),
-				newCompanyToSave.getSecondSurname(),
-				newCompanyToSave.getDirection(),
-				newCompanyToSave.getCompanyCol(),
-				newCompanyToSave.getPhone(),
-				newCompanyToSave.getBusinessName()
-				);
-	}
-
-	@Override
 	public List<CompanyResponse> getAllCompanies() {
-		List< Company > business =  this.companyJpaRepository.findAll();
-		List< CompanyResponse > response = business.stream()
-												   .map( company -> new CompanyResponse(
-														   company.getId(),
-														   company.getIdentificationNumber(),
-														   company.getVerificationDigit(),
-														   company.getFirstName(),
-														   company.getOtherName(),
-														   company.getSurname(),
-														   company.getSecondSurname(),
-														   company.getBusinessName(),
-														   company.getDirection(),
-														   company.getCompanyCol(),
-														   company.getPhone()
-														))
-												   .collect(Collectors.toList());
+		List<CompanyResponse> response = null;
+		List<Company> listCompany = this.companyJpaRepository.findAll();
+		response = listCompany.stream().map( company -> new CompanyResponse(
+					company.getId(),
+					company.getIdentificationNumber(),
+					company.getVerificationDigit(),
+					company.getFirstName(),
+					company.getOtherName(),
+					company.getSecondSurname(),
+					company.getSurname(),
+					company.getBusinessName(),
+					company.getDirection(),
+					company.getCompanyCol(),
+					company.getPhone()
+				) ).collect(Collectors.toList());
 		return response;
 	}
 
 	@Override
-	public Optional < CompanyResponse > getCompanyById(int id) {
-		CompanyResponse response = null;
-		Optional<Company> company = this.companyJpaRepository.findById(id);
+	public CompanyResponse createCompany(CompanyRequest request) {
+		Company company = new Company(
+					request.getIdentificationNumber(),
+					request.getVerificationDigit(),
+					request.getFirstName(),
+					request.getOtherName(),
+					request.getSecondSurname(),
+					request.getSurname(),
+					request.getBusinessName(),
+					request.getDirection(),
+					request.getCompanyCol(),
+					request.getPhone()
+				);
+		
+		company = this.companyJpaRepository.save(company);
+		CompanyResponse response = new CompanyResponse(
+					company.getId(),
+					company.getIdentificationNumber(),
+					company.getVerificationDigit(),
+					company.getFirstName(),
+					company.getOtherName(),
+					company.getSecondSurname(),
+					company.getSurname(),
+					company.getBusinessName(),
+					company.getDirection(),
+					company.getCompanyCol(),
+					company.getPhone()
+				);
+		
+		return response;
+	}
+
+	@Override
+	public CompanyResponse deleteCompany(int idCompany) {
+		CompanyResponse response = null; 
+		Optional<Company> company = this.companyJpaRepository.findById( idCompany );
 		if( company.isPresent() == true ) {
+			this.companyJpaRepository.deleteById(idCompany);
 			response = new CompanyResponse(
 					company.get().getId(),
-					company.get().getVerificationDigit(),
 					company.get().getIdentificationNumber(),
+					company.get().getVerificationDigit(),
 					company.get().getFirstName(),
 					company.get().getOtherName(),
-					company.get().getSurname(),
 					company.get().getSecondSurname(),
+					company.get().getSurname(),
+					company.get().getBusinessName(),
 					company.get().getDirection(),
 					company.get().getCompanyCol(),
-					company.get().getPhone(),
-					company.get().getBusinessName()
+					company.get().getPhone()
 					);
-			
 		}
-		return Optional.of(response);
+		return response;
 	}
+	
 
 }

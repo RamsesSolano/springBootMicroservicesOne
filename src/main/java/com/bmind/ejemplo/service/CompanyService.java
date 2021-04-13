@@ -8,7 +8,7 @@ import com.bmind.ejemplo.model.CompanyRequest;
 import com.bmind.ejemplo.model.CompanyResponse;
 
 public interface CompanyService {
-	public abstract CompanyResponse addCompany( CompanyRequest newCompany );
 	public abstract List< CompanyResponse > getAllCompanies();
-	public abstract Optional<CompanyResponse>  getCompanyById( int id );
+	public abstract CompanyResponse createCompany( CompanyRequest request );
+	public abstract CompanyResponse deleteCompany( int idCompany );
 }
